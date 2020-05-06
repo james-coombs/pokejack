@@ -13,6 +13,7 @@ export function Deck() {
   const dealt = useSelector(selectDealt);
   const dispatch = useDispatch();
   //   const [incrementAmount, setIncrementAmount] = useState("2");
+
   console.log("deck shuffled", shuffled);
   console.log("dealt", dealt);
 
