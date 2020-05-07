@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectHand, selectTotal } from "./dealerSlice";
+import { selectHand, selectTotal } from "./playerSlice";
 // import styles from './Counter.module.css';
 
-export function Dealer() {
+export function Player() {
   const total = useSelector(selectTotal);
   const hand = useSelector(selectHand);
 
@@ -12,9 +12,9 @@ export function Dealer() {
 
   return (
     <div className="box">
-      <p>Dealer</p>
+      <p>Player</p>
       <div>Total: {total}</div>
-      <div>{hand.length ? hand.toString() : "Dealer hand is empty."}</div>
+      <div>{hand.length ? hand.toString() : "Player hand is empty."}</div>
     </div>
   );
 }

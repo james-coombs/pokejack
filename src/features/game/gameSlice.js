@@ -1,20 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-export const turnSlice = createSlice({
-  name: "turn",
+export const gameSlice = createSlice({
+  name: "game",
   initialState: {
-    value: 0,
+    turn: 0,
+    inProgress: false,
+    winner: null,
   },
   reducers: {
-    increment: (state) => {
+    incrementTurn: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.value += 1;
+      state.turn += 1;
     },
-    reset: (state) => {
-      state.value = 0;
+    resetGame: (state) => {
+      state.turn = 0;
     },
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload;
@@ -22,7 +24,7 @@ export const turnSlice = createSlice({
   },
 });
 
-export const { increment, reset } = turnSlice.actions;
+export const { incrementTurn, resetGame } = gameSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -37,6 +39,6 @@ export const { increment, reset } = turnSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectCount = (state) => state.turn.value;
+export const selectTurn = (state) => state.game.turn;
 
-export default turnSlice.reducer;
+export default gameSlice.reducer;

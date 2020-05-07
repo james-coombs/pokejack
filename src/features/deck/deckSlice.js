@@ -9,6 +9,7 @@ export const deckSlice = createSlice({
     dealtCard: {},
   },
   reducers: {
+    // dealCards: (state) => {},
     dealCard: (state) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
