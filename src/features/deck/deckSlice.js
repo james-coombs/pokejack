@@ -6,7 +6,8 @@ export const deckSlice = createSlice({
   initialState: {
     deckCards: cards,
     shuffledCards: [],
-    dealtCard: {},
+    // dealtCard: {},
+    topCard: {},
   },
   reducers: {
     // dealCards: (state) => {},
@@ -15,12 +16,16 @@ export const deckSlice = createSlice({
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.dealtCard = state.shuffledCards[0];
+      // state.dealtCard = state.shuffledCards[0];
       state.shuffledCards = state.shuffledCards.slice(1);
     },
     shuffleCards: (state) => {
       const shuffled = shuffleArray(state.deckCards);
       state.shuffledCards = shuffled;
+    },
+    resetDeck: (state) => {
+      state.deckCards = cards;
+      state.shuffledCards = [];
     },
 
     // incrementByAmount: (state, action) => {
@@ -44,7 +49,7 @@ const shuffleArray = (array) => {
   return array;
 };
 
-export const { dealCard, shuffleCards } = deckSlice.actions;
+export const { dealCard, shuffleCards, resetDeck } = deckSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -62,5 +67,6 @@ export const { dealCard, shuffleCards } = deckSlice.actions;
 // export const selectCount = (state) => state.turn.value;
 export const selectShuffled = (state) => state.deck.shuffledCards;
 export const selectDealt = (state) => state.deck.dealtCard;
+export const selectTop = (state) => state.deck.shuffledCards[0];
 
 export default deckSlice.reducer;

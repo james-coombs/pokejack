@@ -8,15 +8,19 @@ export const playerSlice = createSlice({
     total: 0,
   },
   reducers: {
-    addToHand: (state) => {
+    addToPlayerHand: (state, action) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
-      state.hand.push(1);
+      state.hand.push(action.payload);
     },
-    getTotal: (state) => {
+    getPlayerTotal: (state) => {
       state.value = 0;
+    },
+    resetPlayer: (state) => {
+      state.hand = [];
+      state.total = 0;
     },
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload;
@@ -24,7 +28,11 @@ export const playerSlice = createSlice({
   },
 });
 
-export const { addToHand, getTotal } = playerSlice.actions;
+export const {
+  addToPlayerHand,
+  getPlayerTotal,
+  resetPlayer,
+} = playerSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
