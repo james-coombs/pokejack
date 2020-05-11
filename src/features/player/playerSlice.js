@@ -15,8 +15,8 @@ export const playerSlice = createSlice({
       // immutable state based off those changes
       state.hand.push(action.payload);
     },
-    getPlayerTotal: (state) => {
-      state.value = 0;
+    setPlayerTotal: (state, action) => {
+      state.total = action.payload;
     },
     resetPlayer: (state) => {
       state.hand = [];
@@ -30,7 +30,7 @@ export const playerSlice = createSlice({
 
 export const {
   addToPlayerHand,
-  getPlayerTotal,
+  setPlayerTotal,
   resetPlayer,
 } = playerSlice.actions;
 
@@ -48,6 +48,6 @@ export const {
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectTotal = (state) => state.player.total;
-export const selectHand = (state) => state.player.hand;
+export const selectPlayerHand = (state) => state.player.hand;
 
 export default playerSlice.reducer;

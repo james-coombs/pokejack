@@ -6,6 +6,7 @@ export const dealerSlice = createSlice({
   initialState: {
     hand: [],
     total: 0,
+    willTakeCard: false,
   },
   reducers: {
     addToDealerHand: (state, action) => {
@@ -15,8 +16,13 @@ export const dealerSlice = createSlice({
       // immutable state based off those changes
       state.hand.push(action.payload);
     },
-    getDealerTotal: (state) => {
-      state.value = 0;
+    getDealerTotal: (state, action) => {
+      // state.total = action;
+    },
+    takeDealerAction: (state, action) => {
+      action.payload >= 17
+        ? (state.willTakeCard = false)
+        : (state.willTakeCard = true);
     },
     resetDealer: (state) => {
       state.hand = [];
@@ -32,6 +38,7 @@ export const {
   addToDealerHand,
   getDealerTotal,
   resetDealer,
+  takeDealerAction,
 } = dealerSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It

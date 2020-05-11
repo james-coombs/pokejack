@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import cards from "./cards";
+import aceDeck from "./aceDeck";
 
 export const deckSlice = createSlice({
   name: "deck",
   initialState: {
-    deckCards: cards,
+    deckCards: aceDeck,
     topCard: {},
   },
   reducers: {

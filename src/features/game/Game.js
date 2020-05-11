@@ -10,7 +10,11 @@ import {
   resetDeck,
 } from "../deck/deckSlice";
 import { addToPlayerHand, resetPlayer } from "../player/playerSlice";
-import { addToDealerHand, resetDealer } from "../dealer/dealerSlice";
+import {
+  addToDealerHand,
+  takeDealerAction,
+  resetDealer,
+} from "../dealer/dealerSlice";
 
 import store from "../../app/store";
 
@@ -64,11 +68,14 @@ export function Game() {
         Shuffle
       </button>
       <button aria-label="Turn" onClick={() => handleDeal(true)}>
-        Player Card
+        Hit
       </button>
-      <button aria-label="Turn" onClick={() => handleDeal(false)}>
+      <button aria-label="Turn" onClick={() => handleDeal(true)}>
+        Hold
+      </button>
+      {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
         Dealer Card
-      </button>
+      </button> */}
       <button aria-label="Turn" onClick={() => handleStart()}>
         Start
       </button>
