@@ -5,6 +5,7 @@ import gameReducer from "../features/game/gameSlice";
 import deckReducer from "../features/deck/deckSlice";
 import dealerReducer from "../features/dealer/dealerSlice";
 import playerReducer from "../features/player/playerSlice";
+import pokedexReducer from "../features/pokedex/pokedexSlice";
 
 // const store = configureStore({
 //   reducer: {
@@ -22,6 +23,7 @@ const reducer = {
   deck: deckReducer,
   dealer: dealerReducer,
   player: playerReducer,
+  pokedex: pokedexReducer,
 };
 
 const middleware = [thunk];
