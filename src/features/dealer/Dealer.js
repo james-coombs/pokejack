@@ -14,7 +14,11 @@ export function Dealer() {
     <div className="box">
       <p>Dealer</p>
       <div>Total: {total}</div>
-      <div>{hand.length ? hand.toString() : "Dealer hand is empty."}</div>
+      <div>
+        {hand.length
+          ? hand.map((c) => <div className="col-3">{JSON.stringify(c)}</div>)
+          : "Dealer hand is empty."}
+      </div>
     </div>
   );
 }

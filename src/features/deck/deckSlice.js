@@ -5,27 +5,20 @@ export const deckSlice = createSlice({
   name: "deck",
   initialState: {
     deckCards: cards,
-    shuffledCards: [],
-    // dealtCard: {},
     topCard: {},
   },
   reducers: {
-    // dealCards: (state) => {},
-    dealCard: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      // state.dealtCard = state.shuffledCards[0];
-      state.shuffledCards = state.shuffledCards.slice(1);
+    setTopCard: (state) => {
+      state.topCard = state.deckCards[0];
+    },
+    removeCard: (state) => {
+      state.deckCards = state.deckCards.slice(1);
     },
     shuffleCards: (state) => {
-      const shuffled = shuffleArray(state.deckCards);
-      state.shuffledCards = shuffled;
+      state.deckCards = shuffleArray(state.deckCards);
     },
     resetDeck: (state) => {
       state.deckCards = cards;
-      state.shuffledCards = [];
     },
 
     // incrementByAmount: (state, action) => {
@@ -49,7 +42,12 @@ const shuffleArray = (array) => {
   return array;
 };
 
-export const { dealCard, shuffleCards, resetDeck } = deckSlice.actions;
+export const {
+  removeCard,
+  shuffleCards,
+  setTopCard,
+  resetDeck,
+} = deckSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -65,8 +63,8 @@ export const { dealCard, shuffleCards, resetDeck } = deckSlice.actions;
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 // export const selectCount = (state) => state.turn.value;
-export const selectShuffled = (state) => state.deck.shuffledCards;
+export const selectDeck = (state) => state.deck.deckCards;
 export const selectDealt = (state) => state.deck.dealtCard;
-export const selectTop = (state) => state.deck.shuffledCards[0];
+export const selectTop = (state) => state.deck.topCard;
 
 export default deckSlice.reducer;

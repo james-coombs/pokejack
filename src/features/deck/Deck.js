@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectShuffled, selectDealt } from "./deckSlice";
+import { selectDeck, selectDealt } from "./deckSlice";
 // import styles from './Counter.module.css';
 
 export function Deck() {
-  const shuffled = useSelector(selectShuffled);
+  const deck = useSelector(selectDeck);
   const dealt = useSelector(selectDealt);
   const dispatch = useDispatch();
 
@@ -12,7 +12,7 @@ export function Deck() {
     <div className="box">
       <p>Deck</p>
       <div className="row">
-        {shuffled.map((s) => (
+        {deck.map((s) => (
           <div className="col-3">{JSON.stringify(s)}</div>
         ))}
       </div>

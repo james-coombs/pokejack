@@ -1,19 +1,18 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { incrementTurn, resetGame, selectTurn } from "./gameSlice";
 import {
-  dealCard,
+  removeCard,
   shuffleCards,
-  selectShuffled,
+  setTopCard,
   selectDealt,
   selectTop,
   resetDeck,
 } from "../deck/deckSlice";
-
 import { addToPlayerHand, resetPlayer } from "../player/playerSlice";
 import { addToDealerHand, resetDealer } from "../dealer/dealerSlice";
 
-// import styles from './Counter.module.css';
+import store from "../../app/store";
 
 export function Game() {
   const turn = useSelector(selectTurn);
@@ -21,9 +20,32 @@ export function Game() {
   const dealtCard = useSelector(selectDealt);
   const top = useSelector(selectTop);
 
-  const handleDeal = () => {
-    dispatch(dealCard());
-    dispatch(addToPlayerHand(top));
+  const handleStart = () => {
+    handleShuffle();
+
+    for (var i = 0; i < 4; i++) {
+      i % 2 === 0 ? handleDeal(true) : handleDeal(false);
+    }
+  };
+
+  const handleDeal = (isPlayer) => {
+    let topCard = store.getState().deck.topCard;
+
+    if (!isPlayer) {
+      dispatch(addToDealerHand(topCard));
+      dispatch(removeCard());
+      dispatch(setTopCard());
+
+      return;
+    }
+    dispatch(addToPlayerHand(topCard));
+    dispatch(removeCard());
+    dispatch(setTopCard());
+  };
+
+  const handleShuffle = () => {
+    dispatch(shuffleCards());
+    dispatch(setTopCard());
   };
 
   const handleReset = () => {
@@ -36,19 +58,20 @@ export function Game() {
   return (
     <div className="box">
       <p>Game</p>
+      <div>Top Card: {JSON.stringify(top)}</div>
       <div>Turn: {turn}</div>
-      <button aria-label="Turn" onClick={() => dispatch(shuffleCards())}>
+      <button aria-label="Turn" onClick={() => handleShuffle()}>
         Shuffle
       </button>
-      <button aria-label="Turn" onClick={() => handleDeal()}>
-        Deal player Card
+      <button aria-label="Turn" onClick={() => handleDeal(true)}>
+        Player Card
       </button>
-      {/* <button aria-label="" onClick={() => dispatch(incrementTurn())}>
-        Hit
+      <button aria-label="Turn" onClick={() => handleDeal(false)}>
+        Dealer Card
       </button>
-      <button aria-label="" onClick={() => dispatch(incrementTurn())}>
-        Hold
-      </button> */}
+      <button aria-label="Turn" onClick={() => handleStart()}>
+        Start
+      </button>
       <button aria-label="" onClick={() => handleReset()}>
         Reset
       </button>
