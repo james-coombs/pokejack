@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addPokemon, selectPokemon } from "./pokedexSlice";
+import {
+  getPokemonNames,
+  selectPokemonNames,
+  getPokemonData,
+  selectPokemonData,
+  getNumber,
+  selectPokemonNumber,
+} from "./pokedexSlice";
 
 /*
     initailly get kanto dex
@@ -14,37 +21,76 @@ import { addPokemon, selectPokemon } from "./pokedexSlice";
 
 export function Pokedex() {
   const dispatch = useDispatch();
-  //   const pokemon = useSelector(selectPokemon);
-
-  //   useEffect(() => {
-  //     getP();
-  //   });
+  const pokemonNames = useSelector(selectPokemonNames);
+  const pokemonNumber = useSelector(selectPokemonNumber);
 
   const Pokedex = require("pokeapi-js-wrapper");
   const options = {
     protocol: "https",
     versionPath: "/api/v2/",
     cache: true,
-    timeout: 5 * 1000, // 5s
+    timeout: 10 * 1000, // 5s
   };
   const P = new Pokedex.Pokedex(options);
 
-  //   const [pkmn, setPokemon] = useState([]);
+  const fetchAll = async () => {
+    // This wil get list of all available Pokemon (807), but sprites don't exist for gen. 6+
+    // Because of this, hard-coding '649' (Genesect) as the limit
+    // const interval = { limit: 1, offset: 0 };
+    // const list = await P.getPokemonSpeciesList();
+    // console.log(list);
+    // dispatch(getNumber(list.count)); // 807
 
-  async function fetch() {
-    const pokes = await P.getGenerationByName("generation-i");
-    // setPokemon(pokes);
-    const sp = [pokes.pokemon_species].flat();
-    dispatch(addPokemon(sp));
-  }
+    for (let i = 0; i < 52; i++) {
+      let number = Math.floor(Math.random() * 649) + 1;
+      dispatch(getNumber(number));
+      // const pkmn = await P.resource(
+      //   `https://pokeapi.co/api/v2/pokemon/${number}`
+      // );
+
+      // dispatch(
+      //   getPokemonData({
+      //     id: pkmn.id,
+      //     name: pkmn.name,
+      //     sprites: pkmn.sprites,
+      //     stats: pkmn.stats,
+      //   })
+      // );
+    }
+
+    // const shuffled = pokes.pokemon_entries.sort(() => 0.5 - Math.random());
+
+    // let selected = shuffled.slice(0, 52);
+
+    // console.log(selected);
+
+    // dispatch(getPokemonNames(selected));
+  };
+
+  const fetchOne = () => {
+    pokemonNames.forEach(async (name) => {
+      const poke = await P.getPokemonByName(name.pokemon_species.name);
+      dispatch(getPokemonData(poke));
+    });
+  };
+
+  const num = () => {
+    console.log("num");
+    for (let i = 0; i < 52; i++) {
+      console.log(i, Math.floor(Math.random() * 964) + 1);
+    }
+  };
 
   return (
     <div className="box">
-      <button aria-label="Turn" onClick={() => fetch()}>
-        Add pokes
+      <button aria-label="Turn" onClick={() => fetchAll()}>
+        Fetch All
+      </button>
+      <button aria-label="Turn" onClick={() => num()}>
+        Num
       </button>
       <p>Pokemon: </p>
-      {/* <div>{pokemon.length ? pokemon.map((p) => JSON.parse(p)) : null}</div> */}
+      {/* <div>{pokemon ? pokemon.forEach((p) => JSON.parse(p)) : null}</div> */}
     </div>
   );
 }

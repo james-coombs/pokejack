@@ -4,16 +4,28 @@ import { createSlice } from "@reduxjs/toolkit";
 export const pokedexSlice = createSlice({
   name: "pokedex",
   initialState: {
-    pokemon: [],
+    numbers: [],
+    pokemonNames: [],
+    pokemonData: [],
   },
   reducers: {
-    addPokemon: (state, action) => {
-      state.pokemon.push(action.payload);
+    getNumber: (state, action) => {
+      state.numbers.push(action.payload);
+    },
+    getPokemonNames: (state, action) => {
+      state.pokemonNames = action.payload;
+    },
+    getPokemonData: (state, action) => {
+      state.pokemonData.push(action.payload);
     },
   },
 });
 
-export const { addPokemon } = pokedexSlice.actions;
+export const {
+  getPokemonNames,
+  getPokemonData,
+  getNumber,
+} = pokedexSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -29,6 +41,8 @@ export const { addPokemon } = pokedexSlice.actions;
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 
-export const selectPokemon = (state) => state.pokedex.pokemon;
+export const selectPokemonNames = (state) => state.pokedex.pokemonNames;
+export const selectPokemonData = (state) => state.pokedex.pokemonData;
+export const selectPokemonNumber = (state) => state.pokedex.number;
 
 export default pokedexSlice.reducer;
