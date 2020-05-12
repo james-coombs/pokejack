@@ -1,12 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-// import store from "../../app/store";
-
+import pokemonData from "./pokemonData";
 export const pokedexSlice = createSlice({
   name: "pokedex",
   initialState: {
     numbers: [],
     pokemonNames: [],
-    pokemonData: [],
+    pokemonData: pokemonData,
   },
   reducers: {
     getNumber: (state, action) => {

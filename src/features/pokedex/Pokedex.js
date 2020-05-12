@@ -9,6 +9,8 @@ import {
   selectPokemonNumber,
 } from "./pokedexSlice";
 
+import { ReactComponent as Club } from "../../svg/club.svg";
+
 /*
     initailly get kanto dex
 
@@ -21,8 +23,7 @@ import {
 
 export function Pokedex() {
   const dispatch = useDispatch();
-  const pokemonNames = useSelector(selectPokemonNames);
-  const pokemonNumber = useSelector(selectPokemonNumber);
+  const pokemonData = useSelector(selectPokemonData);
 
   const Pokedex = require("pokeapi-js-wrapper");
   const options = {
@@ -33,7 +34,7 @@ export function Pokedex() {
   };
   const P = new Pokedex.Pokedex(options);
 
-  const fetchAll = async () => {
+  const fetchPokemon = async () => {
     // This wil get list of all available Pokemon (807), but sprites don't exist for gen. 6+
     // Because of this, hard-coding '649' (Genesect) as the limit
     // const interval = { limit: 1, offset: 0 };
@@ -44,53 +45,62 @@ export function Pokedex() {
     for (let i = 0; i < 52; i++) {
       let number = Math.floor(Math.random() * 649) + 1;
       dispatch(getNumber(number));
-      // const pkmn = await P.resource(
-      //   `https://pokeapi.co/api/v2/pokemon/${number}`
-      // );
+      const pkmn = await P.resource(
+        `https://pokeapi.co/api/v2/pokemon/${number}`
+      );
 
-      // dispatch(
-      //   getPokemonData({
-      //     id: pkmn.id,
-      //     name: pkmn.name,
-      //     sprites: pkmn.sprites,
-      //     stats: pkmn.stats,
-      //   })
-      // );
-    }
-
-    // const shuffled = pokes.pokemon_entries.sort(() => 0.5 - Math.random());
-
-    // let selected = shuffled.slice(0, 52);
-
-    // console.log(selected);
-
-    // dispatch(getPokemonNames(selected));
-  };
-
-  const fetchOne = () => {
-    pokemonNames.forEach(async (name) => {
-      const poke = await P.getPokemonByName(name.pokemon_species.name);
-      dispatch(getPokemonData(poke));
-    });
-  };
-
-  const num = () => {
-    console.log("num");
-    for (let i = 0; i < 52; i++) {
-      console.log(i, Math.floor(Math.random() * 964) + 1);
+      dispatch(
+        getPokemonData({
+          id: pkmn.id,
+          name: pkmn.name,
+          sprites: pkmn.sprites,
+          stats: pkmn.stats,
+        })
+      );
     }
   };
+
+  const getShiny = () => {
+    // 1/8192 is shiny chance
+    let x = Math.floor(Math.random() * 10) + 1;
+    let y = Math.floor(Math.random() * 10) + 1;
+    return x === y;
+  };
+
+  console.log(pokemonData);
 
   return (
     <div className="box">
-      <button aria-label="Turn" onClick={() => fetchAll()}>
+      <button aria-label="Turn" onClick={() => fetchPokemon()}>
         Fetch All
       </button>
-      <button aria-label="Turn" onClick={() => num()}>
-        Num
-      </button>
       <p>Pokemon: </p>
-      {/* <div>{pokemon ? pokemon.forEach((p) => JSON.parse(p)) : null}</div> */}
+      <div className="row">
+        {pokemonData.map((data) => {
+          let isShiny = getShiny();
+          return (
+            <>
+              <div className="col-6">
+                <p>
+                  {data.name}
+                  <br />
+                  {isShiny ? "SHINY!!!" : null}
+                </p>
+                <img
+                  src={
+                    isShiny
+                      ? data.sprites.front_shiny
+                      : data.sprites.front_default
+                  }
+                  alt={data.name}
+                  height="200"
+                  width="200"
+                />
+              </div>
+            </>
+          );
+        })}
+      </div>
     </div>
   );
 }
