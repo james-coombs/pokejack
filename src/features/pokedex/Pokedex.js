@@ -7,7 +7,10 @@ import {
   selectPokemonData,
   getNumber,
   selectPokemonNumber,
+  getOrderedPokemon,
 } from "./pokedexSlice";
+
+import { selectDeck, updateCards } from "../deck/deckSlice";
 
 import { ReactComponent as Club } from "../../svg/club.svg";
 import shiny from "../../img/shiny.png";
@@ -25,6 +28,8 @@ import shiny from "../../img/shiny.png";
 export function Pokedex() {
   const dispatch = useDispatch();
   const pokemonData = useSelector(selectPokemonData);
+
+  const deck = useSelector(selectDeck);
 
   const Pokedex = require("pokeapi-js-wrapper");
   const options = {
@@ -68,20 +73,54 @@ export function Pokedex() {
     return x === y;
   };
 
+  const orderPokes = () => {
+    let ordered = [];
+    let cards = [];
+
+    for (let i = 0; i < pokemonData.length; i++) {
+      let total = 0;
+      let stats = pokemonData[i].stats;
+
+      for (let j = 0; j < stats.length; j++) {
+        total += stats[j].base_stat;
+      }
+
+      ordered[i] = Object.assign({}, pokemonData[i], { bst: total });
+    }
+
+    ordered = ordered.sort((a, b) => (a.bst > b.bst ? 1 : -1));
+
+    for (let i = 0; i < deck.length; i++) {
+      cards[i] = { ...ordered[i], ...deck[i] };
+    }
+
+    dispatch(updateCards(cards));
+
+    console.log(cards);
+  };
+
+  console.log(deck);
+
+  let updated = deck[0].bst ? true : false;
+
   return (
     <div className="box">
-      <button aria-label="Turn" onClick={() => fetchPokemon()}>
+      {/* <button aria-label="Turn" onClick={() => fetchPokemon()}>
         Fetch All
+      </button> */}
+      <button aria-label="Turn" onClick={() => orderPokes()}>
+        order pokes
       </button>
       <p>Pokemon: </p>
       <div className="row">
-        {pokemonData.map((data) => {
+        {deck.map((data) => {
           let isShiny = getShiny();
-          return (
+          return updated ? (
             <>
-              <div className="col-1 px-0">
-                <p>{data.name}</p>
-                {isShiny ? <img src={shiny} height="25" width="25" /> : null}
+              <div className="col-2 px-0">
+                {isShiny ? (
+                  <img alt="shiny" src={shiny} height="25" width="25" />
+                ) : null}
                 <img
                   src={
                     isShiny
@@ -92,9 +131,12 @@ export function Pokedex() {
                   height="50"
                   width="50"
                 />
+                <p>
+                  {data.name} - {data.suit} - {data.value}
+                </p>
               </div>
             </>
-          );
+          ) : null;
         })}
       </div>
     </div>

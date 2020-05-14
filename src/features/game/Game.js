@@ -25,8 +25,6 @@ import {
   setDealerTotal,
 } from "../dealer/dealerSlice";
 
-import { checkTotal } from "./util";
-
 import store from "../../app/store";
 
 export function Game() {
@@ -55,16 +53,13 @@ export function Game() {
     if (isPlayer) {
       dispatch(addToPlayerHand(topCard));
       checkTotal(isPlayer);
-
       dispatch(removeCard());
       dispatch(setTopCard());
-
       return;
     }
 
     dispatch(addToDealerHand(topCard));
     checkTotal(isPlayer);
-
     dispatch(removeCard());
     dispatch(setTopCard());
   };
@@ -132,10 +127,11 @@ export function Game() {
         Shuffle
       </button>
       <button aria-label="Turn" onClick={() => handleDeal(true)}>
-        Hit
+        Hit Player
       </button>
-      <button aria-label="Turn" onClick={() => handleDeal(true)}>
-        Hold
+
+      <button aria-label="Turn" onClick={() => handleDeal(false)}>
+        Hit Dealer
       </button>
       {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
         Dealer Card
