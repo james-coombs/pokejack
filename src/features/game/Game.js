@@ -9,12 +9,23 @@ import {
   selectTop,
   resetDeck,
 } from "../deck/deckSlice";
-import { addToPlayerHand, resetPlayer } from "../player/playerSlice";
+import {
+  addToPlayerHand,
+  resetPlayer,
+  selectPlayerTotal,
+  selectPlayerHand,
+  setPlayerTotal,
+} from "../player/playerSlice";
 import {
   addToDealerHand,
   takeDealerAction,
   resetDealer,
+  selectDealerTotal,
+  selectDealerHand,
+  setDealerTotal,
 } from "../dealer/dealerSlice";
+
+import { checkTotal } from "./util";
 
 import store from "../../app/store";
 
@@ -23,6 +34,12 @@ export function Game() {
   const dispatch = useDispatch();
   const dealtCard = useSelector(selectDealt);
   const top = useSelector(selectTop);
+
+  const playerTotal = useSelector(selectPlayerTotal);
+  const playerHand = useSelector(selectPlayerHand);
+
+  const dealerTotal = useSelector(selectDealerTotal);
+  const dealerHand = useSelector(selectDealerHand);
 
   const handleStart = () => {
     handleShuffle();
@@ -35,14 +52,19 @@ export function Game() {
   const handleDeal = (isPlayer) => {
     let topCard = store.getState().deck.topCard;
 
-    if (!isPlayer) {
-      dispatch(addToDealerHand(topCard));
+    if (isPlayer) {
+      dispatch(addToPlayerHand(topCard));
+      checkTotal(isPlayer);
+
       dispatch(removeCard());
       dispatch(setTopCard());
 
       return;
     }
-    dispatch(addToPlayerHand(topCard));
+
+    dispatch(addToDealerHand(topCard));
+    checkTotal(isPlayer);
+
     dispatch(removeCard());
     dispatch(setTopCard());
   };
@@ -57,6 +79,48 @@ export function Game() {
     dispatch(resetGame());
     dispatch(resetDealer());
     dispatch(resetPlayer());
+  };
+
+  const checkTotal = (isPlayer) => {
+    let total, hand, cardVal;
+
+    if (isPlayer) {
+      total = playerTotal;
+      hand = store.getState().player.playerHand;
+    } else {
+      total = dealerTotal;
+      hand = store.getState().dealer.dealerHand;
+    }
+
+    hand.map((c) => {
+      cardVal = c.value;
+
+      console.log("cardVal:", cardVal);
+      console.log("hand:", hand);
+      console.log("init total:", total);
+
+      if (isNaN(cardVal)) {
+        // Ace
+        if (cardVal === "A") {
+          if (total + 11 > 21) {
+            cardVal = 1;
+          } else {
+            cardVal = 11;
+          }
+        } else {
+          // Face Card
+          cardVal = 10;
+        }
+      }
+    });
+
+    if (isPlayer) {
+      dispatch(setPlayerTotal(cardVal));
+    } else {
+      dispatch(setDealerTotal(cardVal));
+    }
+
+    return;
   };
 
   return (

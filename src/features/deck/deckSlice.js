@@ -19,7 +19,7 @@ export const deckSlice = createSlice({
       state.deckCards = shuffleArray(state.deckCards);
     },
     resetDeck: (state) => {
-      state.deckCards = cards;
+      state.deckCards = aceDeck;
     },
 
     // incrementByAmount: (state, action) => {

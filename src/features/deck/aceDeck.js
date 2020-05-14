@@ -4,15 +4,31 @@ export default [
     value: 10,
   },
   {
-    suit: "hearts",
+    suit: "spades",
     value: 10,
   },
   {
-    suit: "hearts",
+    suit: "clubs",
+    value: "A",
+  },
+  {
+    suit: "diamonds",
     value: "A",
   },
   {
     suit: "hearts",
-    value: "A",
+    value: 2,
+  },
+  {
+    suit: "clubs",
+    value: 4,
+  },
+  {
+    suit: "diamonds",
+    value: 6,
+  },
+  {
+    suit: "clubs",
+    value: 4,
   },
 ];

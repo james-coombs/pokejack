@@ -1,59 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectPlayerHand, setPlayerTotal, selectTotal } from "./playerSlice";
+import {
+  selectPlayerHand,
+  setPlayerTotal,
+  selectPlayerTotal,
+  selectTotal,
+} from "./playerSlice";
 // import styles from './Counter.module.css';
 
 export function Player() {
-  const playerTotal = useSelector(selectTotal);
-  const hand = useSelector(selectPlayerHand);
+  const playerTotal = useSelector(selectPlayerTotal);
+  const playerHand = useSelector(selectPlayerHand);
 
   const dispatch = useDispatch();
   //   const [incrementAmount, setIncrementAmount] = useState("2");
 
-  useEffect(() => {
-    checkHand();
-  });
+  // useEffect(() => {
+  //   checkHand();
+  // });
 
-  const checkHand = () => {
-    // let h = store.getState().player.hand;
-    // console.log("playerHand", h);
-    let total = playerTotal;
-    // hand.map((c) => (total += c.value));
-    hand.map((c) => {
-      let val = c.value;
+  // const checkHand = (participant) => {
+  //   // let h = store.getState().player.hand;
+  //   // console.log("playerHand", h);
+  //   let total = playerTotal;
+  //   // hand.map((c) => (total += c.value));
+  //   hand.map((c) => {
+  //     let cardVal = c.value;
 
-      if (isNaN(val)) {
-        // Ace
-        if (val === "A") {
-          console.log("ACE - TOTAL: ", total);
-          if (total + 11 > 21) {
-            console.log("Dealt A, total is GT 21. Setting to 1: ", total + 11);
-            val = 1;
-          }
-          if (total + 11 < 21) {
-            console.log("Dealt A, total is LT 21. Setting to 11: ", total + 11);
-            val = 11;
-          }
-        } else {
-          // Face Card
-          console.log("face", val);
-          val = 10;
-        }
-      }
-      total += val;
-    });
-    console.log(total);
+  //     if (isNaN(cardVal)) {
+  //       // Ace
+  //       if (cardVal === "A") {
+  //         console.log("ACE - TOTAL: ", total);
+  //         if (total + 11 > 21) {
+  //           console.log(
+  //             "Dealt A, total is GT 21. Setting A to 1: ",
+  //             total + 11
+  //           );
+  //           cardVal = 1;
+  //         } else if (total + 11 < 21) {
+  //           console.log(
+  //             "Dealt A, total is LT 21. Setting A to 11: ",
+  //             total + 11
+  //           );
+  //           cardVal = 11;
+  //         }
+  //       } else {
+  //         // Face Card
+  //         console.log("face", cardVal);
+  //         cardVal = 10;
+  //       }
+  //     }
+  //     total += cardVal;
+  //   });
 
-    setPlayerTotal(total);
-  };
+  //   dispatch(setPlayerTotal(total));
+  //   console.log("final hand total: ", total);
+
+  //   return;
+  // };
 
   return (
     <div className="box">
       <p>Player</p>
       <div>Player Total: {playerTotal}</div>
       <div>
-        {hand.length
-          ? hand.map((c) => <div className="col-3">{JSON.stringify(c)}</div>)
+        {playerHand.length
+          ? playerHand.map((c) => (
+              <div className="col-3">{JSON.stringify(c)}</div>
+            ))
           : "Player hand is empty."}
       </div>
     </div>

@@ -4,8 +4,8 @@ import { createSlice } from "@reduxjs/toolkit";
 export const dealerSlice = createSlice({
   name: "dealer",
   initialState: {
-    hand: [],
-    total: 0,
+    dealerHand: [],
+    dealerTotal: 0,
     willTakeCard: false,
   },
   reducers: {
@@ -16,8 +16,8 @@ export const dealerSlice = createSlice({
       // immutable state based off those changes
       state.hand.push(action.payload);
     },
-    getDealerTotal: (state, action) => {
-      // state.total = action;
+    setDealerTotal: (state, action) => {
+      state.dealerTotal = action.payload;
     },
     takeDealerAction: (state, action) => {
       action.payload >= 17
@@ -25,8 +25,8 @@ export const dealerSlice = createSlice({
         : (state.willTakeCard = true);
     },
     resetDealer: (state) => {
-      state.hand = [];
-      state.total = 0;
+      state.dealerhand = [];
+      state.dealerTotal = 0;
     },
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload;
@@ -39,6 +39,7 @@ export const {
   getDealerTotal,
   resetDealer,
   takeDealerAction,
+  setDealerTotal,
 } = dealerSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -54,7 +55,7 @@ export const {
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectTotal = (state) => state.dealer.total;
-export const selectHand = (state) => state.dealer.hand;
+export const selectDealerTotal = (state) => state.dealer.dealerTotal;
+export const selectDealerHand = (state) => state.dealer.dealerHand;
 
 export default dealerSlice.reducer;

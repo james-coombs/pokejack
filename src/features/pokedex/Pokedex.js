@@ -68,8 +68,6 @@ export function Pokedex() {
     return x === y;
   };
 
-  console.log(pokemonData);
-
   return (
     <div className="box">
       <button aria-label="Turn" onClick={() => fetchPokemon()}>
