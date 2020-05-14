@@ -10,6 +10,7 @@ import {
 } from "./pokedexSlice";
 
 import { ReactComponent as Club } from "../../svg/club.svg";
+import shiny from "../../img/shiny.png";
 
 /*
     initailly get kanto dex
@@ -80,12 +81,9 @@ export function Pokedex() {
           let isShiny = getShiny();
           return (
             <>
-              <div className="col-6">
-                <p>
-                  {data.name}
-                  <br />
-                  {isShiny ? "SHINY!!!" : null}
-                </p>
+              <div className="col-1 px-0">
+                <p>{data.name}</p>
+                {isShiny ? <img src={shiny} height="25" width="25" /> : null}
                 <img
                   src={
                     isShiny
@@ -93,8 +91,8 @@ export function Pokedex() {
                       : data.sprites.front_default
                   }
                   alt={data.name}
-                  height="200"
-                  width="200"
+                  height="50"
+                  width="50"
                 />
               </div>
             </>
