@@ -49,8 +49,6 @@ export function Pokedex() {
 
       if (!tmp.includes(number)) {
         tmp.push(number);
-
-        // do api
       } else {
         console.log("Dupe number: ", number);
         checkNumber();
@@ -61,8 +59,6 @@ export function Pokedex() {
     while (i--) {
       checkNumber();
     }
-
-    console.log(tmp);
 
     return tmp;
   };
@@ -76,6 +72,7 @@ export function Pokedex() {
     // dispatch(getNumber(list.count)); // 807
 
     const numbers = getNumbers();
+    dispatch(addPokemonNumbers(numbers));
 
     for (let i = 0; i < numbers.length; i++) {
       const pkmn = await P.resource(
@@ -91,8 +88,6 @@ export function Pokedex() {
         })
       );
     }
-
-    dispatch(addPokemonNumbers(numbers));
   };
 
   const getShiny = () => {

@@ -13,7 +13,7 @@ export const pokedexSlice = createSlice({
   },
   reducers: {
     addPokemonNumbers: (state, action) => {
-      state.pokemonNumbers = state.pokemonNumbers.concat(action.payload);
+      state.pokemonNumbers = action.payload;
     },
     getPokemonNames: (state, action) => {
       state.pokemonNames = action.payload;
