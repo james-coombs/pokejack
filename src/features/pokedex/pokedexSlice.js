@@ -4,14 +4,16 @@ import { act } from "react-dom/test-utils";
 export const pokedexSlice = createSlice({
   name: "pokedex",
   initialState: {
-    numbers: [],
+    pokemonNumbers: [],
     pokemonNames: [],
-    pokemonData: pokemonData,
+    // pokemonData: pokemonData,
+    pokemonData: [],
+
     orderedPokemon: [],
   },
   reducers: {
-    getNumber: (state, action) => {
-      state.numbers.push(action.payload);
+    addPokemonNumbers: (state, action) => {
+      state.pokemonNumbers = state.pokemonNumbers.concat(action.payload);
     },
     getPokemonNames: (state, action) => {
       state.pokemonNames = action.payload;
@@ -28,12 +30,12 @@ export const pokedexSlice = createSlice({
 export const {
   getPokemonNames,
   getPokemonData,
-  getNumber,
+  addPokemonNumbers,
   getOrderedPokemon,
 } = pokedexSlice.actions;
 
 export const selectPokemonNames = (state) => state.pokedex.pokemonNames;
 export const selectPokemonData = (state) => state.pokedex.pokemonData;
-export const selectPokemonNumber = (state) => state.pokedex.number;
+export const selectPokemonNumbers = (state) => state.pokedex.pokemonNumbers;
 
 export default pokedexSlice.reducer;

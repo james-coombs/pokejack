@@ -1860,25 +1860,25 @@ export default [
     ],
   },
   {
-    id: 103,
-    name: "exeggutor",
+    id: 157,
+    name: "typhlosion",
     sprites: {
       back_default:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/103.png",
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/157.png",
       back_female: null,
       back_shiny:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/103.png",
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/157.png",
       back_shiny_female: null,
       front_default:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/103.png",
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/157.png",
       front_female: null,
       front_shiny:
-        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/103.png",
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/157.png",
       front_shiny_female: null,
     },
     stats: [
       {
-        base_stat: 55,
+        base_stat: 100,
         effort: 0,
         stat: {
           name: "speed",
@@ -1886,7 +1886,7 @@ export default [
         },
       },
       {
-        base_stat: 75,
+        base_stat: 85,
         effort: 0,
         stat: {
           name: "special-defense",
@@ -1894,15 +1894,15 @@ export default [
         },
       },
       {
-        base_stat: 125,
-        effort: 2,
+        base_stat: 109,
+        effort: 3,
         stat: {
           name: "special-attack",
           url: "https://pokeapi.co/api/v2/stat/4/",
         },
       },
       {
-        base_stat: 85,
+        base_stat: 78,
         effort: 0,
         stat: {
           name: "defense",
@@ -1910,7 +1910,7 @@ export default [
         },
       },
       {
-        base_stat: 95,
+        base_stat: 84,
         effort: 0,
         stat: {
           name: "attack",
@@ -1918,7 +1918,7 @@ export default [
         },
       },
       {
-        base_stat: 95,
+        base_stat: 78,
         effort: 0,
         stat: {
           name: "hp",

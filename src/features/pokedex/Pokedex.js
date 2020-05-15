@@ -5,8 +5,8 @@ import {
   selectPokemonNames,
   getPokemonData,
   selectPokemonData,
-  getNumber,
-  selectPokemonNumber,
+  addPokemonNumbers,
+  selectPokemonNumbers,
   getOrderedPokemon,
 } from "./pokedexSlice";
 
@@ -28,6 +28,7 @@ import shiny from "../../img/shiny.png";
 export function Pokedex() {
   const dispatch = useDispatch();
   const pokemonData = useSelector(selectPokemonData);
+  const pokemonNumbers = useSelector(selectPokemonNumbers);
 
   const deck = useSelector(selectDeck);
 
@@ -40,19 +41,45 @@ export function Pokedex() {
   };
   const P = new Pokedex.Pokedex(options);
 
+  const getNumbers = () => {
+    let tmp = [...pokemonNumbers];
+
+    let checkNumber = () => {
+      let number = Math.floor(Math.random() * 649) + 1;
+
+      if (!tmp.includes(number)) {
+        tmp.push(number);
+
+        // do api
+      } else {
+        console.log("Dupe number: ", number);
+        checkNumber();
+      }
+    };
+
+    let i = 52;
+    while (i--) {
+      checkNumber();
+    }
+
+    console.log(tmp);
+
+    return tmp;
+  };
+
   const fetchPokemon = async () => {
     // This wil get list of all available Pokemon (807), but sprites don't exist for gen. 6+
-    // Because of this, hard-coding '649' (Genesect) as the limit
+    // Because of this, hard-coding '649' (Genesect) in getNumbers()  as the limit
     // const interval = { limit: 1, offset: 0 };
     // const list = await P.getPokemonSpeciesList();
     // console.log(list);
     // dispatch(getNumber(list.count)); // 807
 
-    for (let i = 0; i < 52; i++) {
-      let number = Math.floor(Math.random() * 649) + 1;
-      dispatch(getNumber(number));
+    const numbers = getNumbers();
+
+    for (let i = 0; i < numbers.length; i++) {
       const pkmn = await P.resource(
-        `https://pokeapi.co/api/v2/pokemon/${number}`
+        `https://pokeapi.co/api/v2/pokemon/${numbers[i]}`
       );
 
       dispatch(
@@ -64,6 +91,8 @@ export function Pokedex() {
         })
       );
     }
+
+    dispatch(addPokemonNumbers(numbers));
   };
 
   const getShiny = () => {
@@ -96,18 +125,18 @@ export function Pokedex() {
 
     dispatch(updateCards(cards));
 
-    console.log(cards);
+    // console.log(cards);
   };
 
-  console.log(deck);
+  // console.log(deck);
 
   let updated = deck[0].bst ? true : false;
 
   return (
     <div className="box">
-      {/* <button aria-label="Turn" onClick={() => fetchPokemon()}>
-        Fetch All
-      </button> */}
+      <button aria-label="Turn" onClick={() => fetchPokemon()}>
+        Fetch All (DO NOT PRESS UNLESS NEEDED)
+      </button>
       <button aria-label="Turn" onClick={() => orderPokes()}>
         order pokes
       </button>
