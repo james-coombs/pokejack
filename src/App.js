@@ -11,11 +11,12 @@ import "./App.css";
 function App() {
   return (
     <div className="App">
-      {/* <Dealer />
+      <Dealer />
       <Deck />
+      {/* <Pokedex /> */}
+
       <Game />
-      <Player /> */}
-      <Pokedex />
+      <Player />
     </div>
   );
 }

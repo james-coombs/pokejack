@@ -6,8 +6,8 @@ export const pokedexSlice = createSlice({
   initialState: {
     pokemonNumbers: [],
     pokemonNames: [],
-    // pokemonData: pokemonData,
-    pokemonData: [],
+    pokemonData: pokemonData,
+    // pokemonData: [],
 
     orderedPokemon: [],
   },

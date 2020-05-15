@@ -8,7 +8,10 @@ import {
   selectDealt,
   selectTop,
   resetDeck,
+  selectDeck,
+  updateCards,
 } from "../deck/deckSlice";
+
 import {
   addToPlayerHand,
   resetPlayer,
@@ -24,6 +27,15 @@ import {
   selectDealerHand,
   setDealerTotal,
 } from "../dealer/dealerSlice";
+import {
+  getPokemonNames,
+  selectPokemonNames,
+  getPokemonData,
+  selectPokemonData,
+  addPokemonNumbers,
+  selectPokemonNumbers,
+  getOrderedPokemon,
+} from "../pokedex/pokedexSlice";
 
 import store from "../../app/store";
 
@@ -39,7 +51,13 @@ export function Game() {
   const dealerTotal = useSelector(selectDealerTotal);
   const dealerHand = useSelector(selectDealerHand);
 
+  const pokemonData = useSelector(selectPokemonData);
+
+  const deck = useSelector(selectDeck);
+
   const handleStart = () => {
+    // fetchPokemon();
+    orderPokes();
     handleShuffle();
 
     for (var i = 0; i < 4; i++) {
@@ -74,6 +92,42 @@ export function Game() {
     dispatch(resetGame());
     dispatch(resetDealer());
     dispatch(resetPlayer());
+  };
+
+  const getShiny = () => {
+    // 1/8192 is shiny chance
+    let x = Math.floor(Math.random() * 10) + 1;
+    let y = Math.floor(Math.random() * 10) + 1;
+    return x === y;
+  };
+
+  const orderPokes = () => {
+    let ordered = [];
+    let cards = [];
+
+    for (let i = 0; i < pokemonData.length; i++) {
+      let total = 0;
+      let stats = pokemonData[i].stats;
+
+      for (let j = 0; j < stats.length; j++) {
+        total += stats[j].base_stat;
+      }
+
+      ordered[i] = Object.assign({}, pokemonData[i], {
+        bst: total,
+        isShiny: getShiny(),
+      });
+    }
+
+    ordered = ordered.sort((a, b) => (a.bst > b.bst ? 1 : -1));
+
+    for (let i = 0; i < deck.length; i++) {
+      cards[i] = { ...ordered[i], ...deck[i] };
+    }
+
+    dispatch(updateCards(cards));
+
+    // console.log(cards);
   };
 
   const checkTotal = (isPlayer) => {
@@ -121,7 +175,7 @@ export function Game() {
   return (
     <div className="box">
       <p>Game</p>
-      <div>Top Card: {JSON.stringify(top)}</div>
+      {/* <div>Top Card: {JSON.stringify(top)}</div> */}
       <div>Turn: {turn}</div>
       <button aria-label="Turn" onClick={() => handleShuffle()}>
         Shuffle

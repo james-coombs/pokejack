@@ -20,7 +20,7 @@ export const dealerSlice = createSlice({
         : (state.willTakeCard = true);
     },
     resetDealer: (state) => {
-      state.dealerhand = [];
+      state.dealerHand = [];
       state.dealerTotal = 0;
     },
   },

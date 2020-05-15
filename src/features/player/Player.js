@@ -6,6 +6,9 @@ import {
   selectPlayerTotal,
   selectTotal,
 } from "./playerSlice";
+
+import shiny from "../../img/shiny.png";
+
 // import styles from './Counter.module.css';
 
 export function Player() {
@@ -65,10 +68,29 @@ export function Player() {
       <div>Player Total: {playerTotal}</div>
       <div>
         {playerHand.length
-          ? playerHand.map((c) => (
-              <div className="col-3">{JSON.stringify(c)}</div>
+          ? playerHand.map((data) => (
+              <>
+                <div className="col-2 px-0">
+                  {data.isShiny ? (
+                    <img alt="shiny" src={shiny} height="25" width="25" />
+                  ) : null}
+                  <img
+                    src={
+                      data.isShiny
+                        ? data.sprites.front_shiny
+                        : data.sprites.front_default
+                    }
+                    alt={data.name}
+                    height="50"
+                    width="50"
+                  />
+                  <p>
+                    {data.name} - {data.suit} - {data.value}
+                  </p>
+                </div>
+              </>
             ))
-          : "Player hand is empty."}
+          : "Dealer hand is empty."}
       </div>
     </div>
   );

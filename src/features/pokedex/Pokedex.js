@@ -90,52 +90,17 @@ export function Pokedex() {
     }
   };
 
-  const getShiny = () => {
-    // 1/8192 is shiny chance
-    let x = Math.floor(Math.random() * 10) + 1;
-    let y = Math.floor(Math.random() * 10) + 1;
-    return x === y;
-  };
-
-  const orderPokes = () => {
-    let ordered = [];
-    let cards = [];
-
-    for (let i = 0; i < pokemonData.length; i++) {
-      let total = 0;
-      let stats = pokemonData[i].stats;
-
-      for (let j = 0; j < stats.length; j++) {
-        total += stats[j].base_stat;
-      }
-
-      ordered[i] = Object.assign({}, pokemonData[i], { bst: total });
-    }
-
-    ordered = ordered.sort((a, b) => (a.bst > b.bst ? 1 : -1));
-
-    for (let i = 0; i < deck.length; i++) {
-      cards[i] = { ...ordered[i], ...deck[i] };
-    }
-
-    dispatch(updateCards(cards));
-
-    // console.log(cards);
-  };
-
   // console.log(deck);
-
-  let updated = deck[0].bst ? true : false;
 
   return (
     <div className="box">
-      <button aria-label="Turn" onClick={() => fetchPokemon()}>
+      {/* <button aria-label="Turn" onClick={() => fetchPokemon()}>
         Fetch All (DO NOT PRESS UNLESS NEEDED)
-      </button>
-      <button aria-label="Turn" onClick={() => orderPokes()}>
+      </button> */}
+      {/* <button aria-label="Turn" onClick={() => orderPokes()}>
         order pokes
-      </button>
-      <p>Pokemon: </p>
+      </button> */}
+      {/* <p>Pokemon: </p>
       <div className="row">
         {deck.map((data) => {
           let isShiny = getShiny();
@@ -162,7 +127,7 @@ export function Pokedex() {
             </>
           ) : null;
         })}
-      </div>
+      </div> */}
     </div>
   );
 }
