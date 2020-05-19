@@ -22,11 +22,11 @@ export function Player() {
       <p>Player</p>
       <div>Player Total: {playerTotal}</div>
 
-      <div>
+      <div className="row">
         {playerHand.length
           ? playerHand.map((data) => (
               <>
-                <div className="col-2 px-0">
+                <div className="col-3 px-0">
                   {data.isShiny ? (
                     <img alt="shiny" src={shiny} height="25" width="25" />
                   ) : null}
@@ -37,8 +37,8 @@ export function Player() {
                         : data.sprites.front_default
                     }
                     alt={data.name}
-                    height="50"
-                    width="50"
+                    height="100"
+                    width="100"
                   />
                   <p>
                     {data.name} - {data.suit} - {data.value}

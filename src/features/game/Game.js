@@ -43,7 +43,7 @@ export function Game() {
   const turn = useSelector(selectTurn);
   const dispatch = useDispatch();
   const dealtCard = useSelector(selectDealt);
-  const top = useSelector(selectTop);
+  const topCard = useSelector(selectTop);
 
   const playerTotal = useSelector(selectPlayerTotal);
   const playerHand = useSelector(selectPlayerHand);
@@ -65,72 +65,53 @@ export function Game() {
     for (var i = 0; i < 4; i++) {
       i % 2 === 0 ? handleDeal(true) : handleDeal(false);
     }
+
     dispatch(incrementTurn());
   };
 
-  const checkWin = (total, isPlayer) => {
-    if (total === 21) {
-      dispatch(setWinner(isPlayer ? "player" : "dealer"));
-      console.log("Winner: ", isPlayer ? "player" : "dealer");
-      // End Game
-    }
-    if (total > 21) {
-      dispatch(setWinner(isPlayer ? "dealer" : "player"));
-      console.log("Looser: ", isPlayer ? "player" : "dealer");
+  const checkWin = () => {
+    const player = store.getState().player;
+    const dealer = store.getState().dealer;
 
-      // End Game
+    if (dealer.dealerTotal === 21) {
+      console.log("Dealer wins - ", dealer.dealerTotal);
+      return;
+    }
+    if (player.playerTotal === 21) {
+      console.log("Player wins - ", player.dealerTotal);
+      return;
+      // NEED LOGIC FOR TOTALS OVER 21
+    } else {
+      const max = Math.max(player.playerTotal, dealer.dealerTotal);
+
+      const winner = player.playerTotal === max ? "player" : "dealer";
+      console.log("winner - ", winner);
+      // dispatch(setWinner(winner));
+      return;
     }
   };
-
-  const compareHands = () => {
-    const p = store.getState().player.playerTotal;
-    const d = store.getState().dealer.dealerTotal;
-    const winner = Math.max(p, d);
-    console.log("winner", winner);
-    dispatch(setWinner(winner));
-  };
-
-  /*
-    Player turn:
-      hit
-        deal card
-          check total
-            if 21, win
-            if < 21, loose
-      hold
-        dealer turn
-          if dealer hold, reveal cards, check winner
-
-      Dealer turn:
-        check total
-          if 21, win
-          if > 16, hold
-          if <= 16, hit
-            check total
-              if 21, win
-              if < 21, loose
-            player turn
-  */
 
   const playerTurn = () => {
     handleDeal(true);
     let playerTotal = store.getState().player.playerTotal;
     console.log("player total: ", playerTotal);
-    checkWin(playerTotal, true);
+    checkWin();
   };
 
   const dealerTurn = () => {
     let dealerTotal = store.getState().dealer.dealerTotal;
-    checkWin(dealerTotal, false);
+    checkWin();
 
     if (dealerTotal <= 16) {
-      console.log("HIT - dealer total LT/EQ 16");
+      console.log("HIT - dealer total LT/EQ 16", dealerTotal);
       handleDeal(false);
       dealerTurn();
       return;
     } else {
-      console.log("HOLD - dealer total GT 16");
-      compareHands();
+      console.log("HOLD - dealer total GT 16", dealerTotal);
+      checkWin();
+
+      checkWin();
       return;
     }
   };
@@ -250,8 +231,25 @@ export function Game() {
 
   return (
     <div className="box">
-      <p>Game</p>
-      <div>Top Card: {JSON.stringify(top)}</div>
+      <div className="row">
+        <div className="text-center col-12">
+          {topCard.name ? (
+            <>
+              <p>Top Card</p>
+              <img
+                src={
+                  topCard.isShiny
+                    ? topCard.sprites.back_shiny
+                    : topCard.sprites.back_default
+                }
+                alt={topCard.name}
+                height="100"
+                width="100"
+              />{" "}
+            </>
+          ) : null}
+        </div>
+      </div>
       <div>Turn: {turn}</div>
       <button aria-label="Turn" onClick={() => handleStart()}>
         Start
