@@ -21,6 +21,7 @@ export function Player() {
     <div className="box">
       <p>Player</p>
       <div>Player Total: {playerTotal}</div>
+
       <div>
         {playerHand.length
           ? playerHand.map((data) => (

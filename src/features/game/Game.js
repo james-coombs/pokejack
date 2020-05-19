@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { incrementTurn, resetGame, selectTurn } from "./gameSlice";
+import { incrementTurn, setWinner, resetGame, selectTurn } from "./gameSlice";
 import {
   removeCard,
   shuffleCards,
@@ -21,7 +21,7 @@ import {
 } from "../player/playerSlice";
 import {
   addToDealerHand,
-  takeDealerAction,
+  dealerWillHit,
   resetDealer,
   selectDealerTotal,
   selectDealerHand,
@@ -65,6 +65,74 @@ export function Game() {
     for (var i = 0; i < 4; i++) {
       i % 2 === 0 ? handleDeal(true) : handleDeal(false);
     }
+    dispatch(incrementTurn());
+  };
+
+  const checkWin = (total, isPlayer) => {
+    if (total === 21) {
+      dispatch(setWinner(isPlayer ? "player" : "dealer"));
+      console.log("Winner: ", isPlayer ? "player" : "dealer");
+      // End Game
+    }
+    if (total > 21) {
+      dispatch(setWinner(isPlayer ? "dealer" : "player"));
+      console.log("Looser: ", isPlayer ? "player" : "dealer");
+
+      // End Game
+    }
+  };
+
+  const compareHands = () => {
+    const p = store.getState().player.playerTotal;
+    const d = store.getState().dealer.dealerTotal;
+    const winner = Math.max(p, d);
+    console.log("winner", winner);
+    dispatch(setWinner(winner));
+  };
+
+  /*
+    Player turn:
+      hit
+        deal card
+          check total
+            if 21, win
+            if < 21, loose
+      hold
+        dealer turn
+          if dealer hold, reveal cards, check winner
+
+      Dealer turn:
+        check total
+          if 21, win
+          if > 16, hold
+          if <= 16, hit
+            check total
+              if 21, win
+              if < 21, loose
+            player turn
+  */
+
+  const playerTurn = () => {
+    handleDeal(true);
+    let playerTotal = store.getState().player.playerTotal;
+    console.log("player total: ", playerTotal);
+    checkWin(playerTotal, true);
+  };
+
+  const dealerTurn = () => {
+    let dealerTotal = store.getState().dealer.dealerTotal;
+    checkWin(dealerTotal, false);
+
+    if (dealerTotal <= 16) {
+      console.log("HIT - dealer total LT/EQ 16");
+      handleDeal(false);
+      dealerTurn();
+      return;
+    } else {
+      console.log("HOLD - dealer total GT 16");
+      compareHands();
+      return;
+    }
   };
 
   // Deal to participant based in isPlayer bool
@@ -73,14 +141,15 @@ export function Game() {
 
     if (isPlayer) {
       dispatch(addToPlayerHand(topCard));
-      checkTotal(isPlayer);
+      calculateTotal(isPlayer);
       dispatch(removeCard());
       dispatch(setTopCard());
       return;
     }
 
     dispatch(addToDealerHand(topCard));
-    checkTotal(isPlayer);
+    calculateTotal(isPlayer);
+
     dispatch(removeCard());
     dispatch(setTopCard());
   };
@@ -107,7 +176,7 @@ export function Game() {
     return x === y;
   };
 
-  // ORder pokemon by bst, merge ordered list with deck
+  // Order pokemon by bst, merge ordered list with deck
   const orderPokes = () => {
     let ordered = [];
     let cards = [];
@@ -137,7 +206,7 @@ export function Game() {
 
   // Calculate hand total based on dealt cards
   // Sets ace to 1 or 11
-  const checkTotal = (isPlayer) => {
+  const calculateTotal = (isPlayer) => {
     let total, hand, cardVal;
 
     if (isPlayer) {
@@ -151,9 +220,9 @@ export function Game() {
     hand.map((c) => {
       cardVal = c.value;
 
-      console.log("cardVal:", cardVal);
-      console.log("hand:", hand);
-      console.log("init total:", total);
+      // console.log("cardVal:", cardVal);
+      // console.log("hand:", hand);
+      // console.log("init total:", total);
 
       if (isNaN(cardVal)) {
         // Ace
@@ -188,13 +257,17 @@ export function Game() {
         Start
       </button>
 
-      <button aria-label="Turn" onClick={() => handleDeal(true)}>
-        Hit Player
+      <button aria-label="Turn" onClick={() => playerTurn()}>
+        Hit
       </button>
 
-      <button aria-label="Turn" onClick={() => handleDeal(false)}>
-        Hit Dealer
+      <button aria-label="Turn" onClick={() => dealerTurn()}>
+        Hold
       </button>
+
+      {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
+        Hit Dealer
+      </button> */}
       {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
         Dealer Card
       </button> */}
