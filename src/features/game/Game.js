@@ -55,6 +55,8 @@ export function Game() {
 
   const deck = useSelector(selectDeck);
 
+  // Start game
+  // (make api call, order deck by bst, shuffle, deal first 2 cards to each participant)
   const handleStart = () => {
     // fetchPokemon();
     orderPokes();
@@ -65,6 +67,7 @@ export function Game() {
     }
   };
 
+  // Deal to participant based in isPlayer bool
   const handleDeal = (isPlayer) => {
     let topCard = store.getState().deck.topCard;
 
@@ -82,11 +85,13 @@ export function Game() {
     dispatch(setTopCard());
   };
 
+  // Shuffle deck
   const handleShuffle = () => {
     dispatch(shuffleCards());
     dispatch(setTopCard());
   };
 
+  // Clear player/game state
   const handleReset = () => {
     dispatch(resetDeck());
     dispatch(resetGame());
@@ -94,6 +99,7 @@ export function Game() {
     dispatch(resetPlayer());
   };
 
+  // Random number comparison to dedcide shiny
   const getShiny = () => {
     // 1/8192 is shiny chance
     let x = Math.floor(Math.random() * 10) + 1;
@@ -101,6 +107,7 @@ export function Game() {
     return x === y;
   };
 
+  // ORder pokemon by bst, merge ordered list with deck
   const orderPokes = () => {
     let ordered = [];
     let cards = [];
@@ -126,10 +133,10 @@ export function Game() {
     }
 
     dispatch(updateCards(cards));
-
-    // console.log(cards);
   };
 
+  // Calculate hand total based on dealt cards
+  // Sets ace to 1 or 11
   const checkTotal = (isPlayer) => {
     let total, hand, cardVal;
 
@@ -175,11 +182,12 @@ export function Game() {
   return (
     <div className="box">
       <p>Game</p>
-      {/* <div>Top Card: {JSON.stringify(top)}</div> */}
+      <div>Top Card: {JSON.stringify(top)}</div>
       <div>Turn: {turn}</div>
-      <button aria-label="Turn" onClick={() => handleShuffle()}>
-        Shuffle
+      <button aria-label="Turn" onClick={() => handleStart()}>
+        Start
       </button>
+
       <button aria-label="Turn" onClick={() => handleDeal(true)}>
         Hit Player
       </button>
@@ -190,9 +198,7 @@ export function Game() {
       {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
         Dealer Card
       </button> */}
-      <button aria-label="Turn" onClick={() => handleStart()}>
-        Start
-      </button>
+
       <button aria-label="" onClick={() => handleReset()}>
         Reset
       </button>

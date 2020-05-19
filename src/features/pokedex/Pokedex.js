@@ -15,16 +15,6 @@ import { selectDeck, updateCards } from "../deck/deckSlice";
 import { ReactComponent as Club } from "../../svg/club.svg";
 import shiny from "../../img/shiny.png";
 
-/*
-    initailly get kanto dex
-
-    api call to get all reigins
-    selector to show reigon list
-
-    on select, make api call to get that reigin's dex
-    add new dex to local storage
-  */
-
 export function Pokedex() {
   const dispatch = useDispatch();
   const pokemonData = useSelector(selectPokemonData);
@@ -32,6 +22,7 @@ export function Pokedex() {
 
   const deck = useSelector(selectDeck);
 
+  // PokeAPI wrapper setup
   const Pokedex = require("pokeapi-js-wrapper");
   const options = {
     protocol: "https",
@@ -41,6 +32,8 @@ export function Pokedex() {
   };
   const P = new Pokedex.Pokedex(options);
 
+  // Generate 52 random numbers to select from api
+  // Check against existing list of numbers to stop dupes from being created
   const getNumbers = () => {
     let tmp = [...pokemonNumbers];
 
@@ -63,6 +56,7 @@ export function Pokedex() {
     return tmp;
   };
 
+  // Get 52 random pokemon from api
   const fetchPokemon = async () => {
     // This wil get list of all available Pokemon (807), but sprites don't exist for gen. 6+
     // Because of this, hard-coding '649' (Genesect) in getNumbers()  as the limit
