@@ -1,11 +1,20 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, shallowEqual } from "react-redux";
-import { incrementTurn, setWinner, resetGame, selectTurn } from "./gameSlice";
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Controls } from "./Controls";
+import { Dealer } from "../dealer/Dealer";
+import { Player } from "../player/Player";
+
+import {
+  setWinner,
+  selectWinner,
+  toggleGameProgress,
+  resetGame,
+  selectGameInProgress,
+} from "./gameSlice";
 import {
   removeCard,
   shuffleCards,
   setTopCard,
-  selectDealt,
   selectTop,
   resetDeck,
   selectDeck,
@@ -16,15 +25,12 @@ import {
   addToPlayerHand,
   resetPlayer,
   selectPlayerTotal,
-  selectPlayerHand,
   setPlayerTotal,
 } from "../player/playerSlice";
 import {
   addToDealerHand,
-  dealerWillHit,
   resetDealer,
   selectDealerTotal,
-  selectDealerHand,
   setDealerTotal,
 } from "../dealer/dealerSlice";
 import {
@@ -40,20 +46,15 @@ import {
 import store from "../../app/store";
 
 export function Game() {
-  const turn = useSelector(selectTurn);
   const dispatch = useDispatch();
-  const dealtCard = useSelector(selectDealt);
+
   const topCard = useSelector(selectTop);
-
   const playerTotal = useSelector(selectPlayerTotal);
-  const playerHand = useSelector(selectPlayerHand);
-
   const dealerTotal = useSelector(selectDealerTotal);
-  const dealerHand = useSelector(selectDealerHand);
-
   const pokemonData = useSelector(selectPokemonData);
-
   const deck = useSelector(selectDeck);
+  const winner = useSelector(selectWinner);
+  const gameInProgress = useSelector(selectGameInProgress);
 
   // Start game
   // (make api call, order deck by bst, shuffle, deal first 2 cards to each participant)
@@ -66,51 +67,84 @@ export function Game() {
       i % 2 === 0 ? handleDeal(true) : handleDeal(false);
     }
 
-    dispatch(incrementTurn());
+    dispatch(toggleGameProgress());
   };
 
-  const checkWin = () => {
+  // Decide game winner
+  const checkWin = (isPlayerTurn) => {
     const player = store.getState().player;
-    const dealer = store.getState().dealer;
 
-    if (dealer.dealerTotal === 21) {
-      console.log("Dealer wins - ", dealer.dealerTotal);
+    // Check after player holds
+    if (isPlayerTurn) {
+      if (player.playerTotal === 21) {
+        dispatch(setWinner("player"));
+        dispatch(toggleGameProgress());
+
+        return;
+      }
+      if (player.playerTotal > 21) {
+        dispatch(setWinner("dealer"));
+        dispatch(toggleGameProgress());
+
+        return;
+      }
       return;
-    }
-    if (player.playerTotal === 21) {
-      console.log("Player wins - ", player.dealerTotal);
-      return;
-      // NEED LOGIC FOR TOTALS OVER 21
+      // Dealer's turn
     } else {
-      const max = Math.max(player.playerTotal, dealer.dealerTotal);
+      const dealer = store.getState().dealer;
 
-      const winner = player.playerTotal === max ? "player" : "dealer";
-      console.log("winner - ", winner);
-      // dispatch(setWinner(winner));
-      return;
+      if (dealer.dealerTotal === 21) {
+        dispatch(setWinner("dealer"));
+        dispatch(toggleGameProgress());
+
+        return;
+      }
+      if (player.playerTotal === 21) {
+        dispatch(setWinner("player"));
+        dispatch(toggleGameProgress());
+
+        return;
+      }
+      if (player.playerTotal > 21) {
+        dispatch(setWinner("dealer"));
+        dispatch(toggleGameProgress());
+
+        return;
+      }
+      if (dealer.dealerTotal > 21) {
+        dispatch(setWinner("player"));
+        dispatch(toggleGameProgress());
+
+        return;
+      } else {
+        const max = Math.max(player.playerTotal, dealer.dealerTotal);
+        const winner = dealer.dealerTotal === max ? "dealer" : "player";
+        dispatch(setWinner(winner));
+        dispatch(toggleGameProgress());
+
+        return;
+      }
     }
   };
 
+  // PLayer action
   const playerTurn = () => {
     handleDeal(true);
-    let playerTotal = store.getState().player.playerTotal;
-    console.log("player total: ", playerTotal);
-    checkWin();
+    // let playerTotal = store.getState().player.playerTotal;
+    // console.log("player total: ", playerTotal);
+    checkWin(true);
   };
 
+  // Dealer action
   const dealerTurn = () => {
     let dealerTotal = store.getState().dealer.dealerTotal;
     checkWin();
 
     if (dealerTotal <= 16) {
-      console.log("HIT - dealer total LT/EQ 16", dealerTotal);
       handleDeal(false);
       dealerTurn();
       return;
     } else {
-      console.log("HOLD - dealer total GT 16", dealerTotal);
-      checkWin();
-
       checkWin();
       return;
     }
@@ -231,9 +265,11 @@ export function Game() {
 
   return (
     <div className="box">
-      <div className="row">
+      <div className="">
+        <Dealer />
         <div className="text-center col-12">
-          {topCard.name ? (
+          {winner ? <p>Winner: {winner}</p> : null}
+          {topCard.name && gameInProgress ? (
             <>
               <p>Top Card</p>
               <img
@@ -249,30 +285,14 @@ export function Game() {
             </>
           ) : null}
         </div>
+        <Player />
+        <Controls
+          handleStart={handleStart}
+          playerTurn={playerTurn}
+          dealerTurn={dealerTurn}
+          handleReset={handleReset}
+        />
       </div>
-      <div>Turn: {turn}</div>
-      <button aria-label="Turn" onClick={() => handleStart()}>
-        Start
-      </button>
-
-      <button aria-label="Turn" onClick={() => playerTurn()}>
-        Hit
-      </button>
-
-      <button aria-label="Turn" onClick={() => dealerTurn()}>
-        Hold
-      </button>
-
-      {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
-        Hit Dealer
-      </button> */}
-      {/* <button aria-label="Turn" onClick={() => handleDeal(false)}>
-        Dealer Card
-      </button> */}
-
-      <button aria-label="" onClick={() => handleReset()}>
-        Reset
-      </button>
     </div>
   );
 }

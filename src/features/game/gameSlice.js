@@ -3,21 +3,19 @@ import { createSlice } from "@reduxjs/toolkit";
 export const gameSlice = createSlice({
   name: "game",
   initialState: {
-    turn: 0,
     inProgress: false,
     winner: null,
   },
   reducers: {
-    incrementTurn: (state) => {
-      state.turn += 1;
-    },
     resetGame: (state) => {
-      state.turn = 0;
       state.winner = null;
       state.inProgress = false;
     },
     setWinner: (state, action) => {
       state.winner = action.payload;
+    },
+    toggleGameProgress: (state) => {
+      state.inProgress = !state.inProgress;
     },
     // incrementByAmount: (state, action) => {
     //   state.value += action.payload;
@@ -25,7 +23,7 @@ export const gameSlice = createSlice({
   },
 });
 
-export const { incrementTurn, setWinner, resetGame } = gameSlice.actions;
+export const { setWinner, toggleGameProgress, resetGame } = gameSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
@@ -40,7 +38,7 @@ export const { incrementTurn, setWinner, resetGame } = gameSlice.actions;
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
-export const selectTurn = (state) => state.game.turn;
-export const winner = (state) => state.game.winner;
+export const selectWinner = (state) => state.game.winner;
+export const selectGameInProgress = (state) => state.game.inProgress;
 
 export default gameSlice.reducer;
