@@ -7,6 +7,8 @@ import {
   selectTotal,
 } from "./playerSlice";
 
+import CardFront from "../../components/CardFront";
+
 import shiny from "../../img/shiny.png";
 
 // import styles from './Counter.module.css';
@@ -24,28 +26,7 @@ export function Player() {
 
       <div className="row">
         {playerHand.length ? (
-          playerHand.map((data) => (
-            <>
-              <div className="col-3 px-0">
-                {data.isShiny ? (
-                  <img alt="shiny" src={shiny} height="25" width="25" />
-                ) : null}
-                <img
-                  src={
-                    data.isShiny
-                      ? data.sprites.front_shiny
-                      : data.sprites.front_default
-                  }
-                  alt={data.name}
-                  height="100"
-                  width="100"
-                />
-                <p>
-                  {data.name} - {data.suit} - {data.value}
-                </p>
-              </div>
-            </>
-          ))
+          playerHand.map((data) => <CardFront data={data} />)
         ) : (
           <p style={{ margin: "0 auto" }}>Player hand is empty.</p>
         )}

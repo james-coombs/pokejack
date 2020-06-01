@@ -30,6 +30,44 @@
   margin: 10px;
   border: 1px solid black;
 }
+.playing-card-body {
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.card-inner-top {
+  border: 1px solid black;
+  border-bottom: none;
+  border-radius: 10px 10px 0px 0px;
+}
+.card-inner-bottom {
+  border: 1px solid black;
+  border-top: none;
+  border-radius: 0px 0px 10px 10px;
+}
+
+.lg-suit-svg {
+  max-height: 35px;
+  max-width: 35px;
+}
+
+.sm-suit-svg {
+  max-height: 25px;
+  max-width: 25px;
+}
+
+.bottom-card-image {
+  transform: rotate(180deg) scaleX(-1);
+  /* display: block;
+  margin: 0 auto; */
+}
+.bottom-card-value {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  transform: rotate(180deg) scaleX(-1);
+  /* display: block;
+  margin: 0 auto; */
+}
 
 @keyframes App-logo-float {
   0% {
