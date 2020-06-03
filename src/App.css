@@ -7,11 +7,36 @@
   border: 1px solid black;
 }
 
+.circleBase {
+  border-radius: 50%;
+  /* behavior: url(PIE.htc); remove if you don't care about IE8 */
+  width: 150px;
+  height: 150px;
+  background: #fbfbf8;
+  border: 3px solid #000;
+  margin: 0 auto;
+  margin-top: 55%;
+}
+
 .playing-card-body {
   border: 1px solid black;
   border-radius: 10px;
   background-color: #fbfbf8;
   max-width: 300px !important;
+}
+
+.horizontal {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  margin: 0 auto;
+  height: 500px;
 }
 
 .card-image {

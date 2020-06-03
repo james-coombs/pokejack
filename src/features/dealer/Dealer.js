@@ -15,12 +15,12 @@ export function Dealer() {
     <div className="box">
       <p>Dealer</p>
       <div>Total: {dealertotal}</div>
-      <div className="row text-center">
+      <div className="row px-5 text-center">
         {dealerHand.length ? (
           dealerHand.map((data) => (
             <>
               {data === dealerHand[0] ? (
-                <div className="col-3 px-0">
+                <div className="col px-0 playing-card-body">
                   <CardFront data={data} />
                 </div>
               ) : (

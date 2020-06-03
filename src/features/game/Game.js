@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Controls } from "./Controls";
 import { Dealer } from "../dealer/Dealer";
 import { Player } from "../player/Player";
+import CardBack from "../../components/CardBack";
 
 import {
   setWinner,
@@ -270,19 +271,9 @@ export function Game() {
         <div className="text-center col-12">
           {winner ? <p>Winner: {winner}</p> : null}
           {topCard.name && gameInProgress ? (
-            <>
-              <p>Top Card</p>
-              <img
-                src={
-                  topCard.isShiny
-                    ? topCard.sprites.back_shiny
-                    : topCard.sprites.back_default
-                }
-                alt={topCard.name}
-                height="100"
-                width="100"
-              />{" "}
-            </>
+            <div>
+              <CardBack data={topCard} horizontal={true} />
+            </div>
           ) : null}
         </div>
         <Player />
