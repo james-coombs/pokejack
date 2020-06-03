@@ -1,30 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  selectPlayerHand,
-  setPlayerTotal,
-  selectPlayerTotal,
-  selectTotal,
-} from "./playerSlice";
+import React from "react";
+import { useSelector } from "react-redux";
+import { selectPlayerHand, selectPlayerTotal } from "./playerSlice";
 
 import CardFront from "../../components/CardFront";
-
-import shiny from "../../img/shiny.png";
-
-// import styles from './Counter.module.css';
 
 export function Player() {
   const playerTotal = useSelector(selectPlayerTotal);
   const playerHand = useSelector(selectPlayerHand);
-
-  const dispatch = useDispatch();
 
   return (
     <div className="box">
       <p>Player</p>
       <div>Player Total: {playerTotal}</div>
 
-      <div className="row">
+      <div className="row px-5">
         {playerHand.length ? (
           playerHand.map((data) => <CardFront data={data} />)
         ) : (

@@ -1,49 +1,22 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-float infinite 3s ease-in-out;
-  }
-}
-
-.App-header {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-}
-
-.App-link {
-  color: rgb(112, 76, 182);
+#body {
+  background-color: #477148;
 }
 
 .box {
   margin: 10px;
   border: 1px solid black;
 }
+
 .playing-card-body {
   border: 1px solid black;
   border-radius: 10px;
+  background-color: #fbfbf8;
+  max-width: 300px !important;
 }
 
-.card-inner-top {
-  border: 1px solid black;
-  border-bottom: none;
-  border-radius: 10px 10px 0px 0px;
-}
-.card-inner-bottom {
-  border: 1px solid black;
-  border-top: none;
-  border-radius: 0px 0px 10px 10px;
+.card-image {
+  width: 150px;
+  height: 150px;
 }
 
 .lg-suit-svg {
@@ -56,17 +29,8 @@
   max-width: 25px;
 }
 
-.bottom-card-image {
-  transform: rotate(180deg) scaleX(-1);
-  /* display: block;
-  margin: 0 auto; */
-}
-.bottom-card-value {
-  unicode-bidi: bidi-override;
-  direction: rtl;
-  transform: rotate(180deg) scaleX(-1);
-  /* display: block;
-  margin: 0 auto; */
+.flipped-card-half {
+  transform: rotate(-180deg);
 }
 
 @keyframes App-logo-float {
